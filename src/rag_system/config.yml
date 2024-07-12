@@ -1,0 +1,30 @@
+# RAG algorithm parameters
+DATA_PATH: 'data/'
+
+DATA_SET: 'bilgeyucel/seven-wonders'
+# dense - 'sentence-transformers/all-MiniLM-L6-v2'
+# hybrid - "BAAI/bge-small-en-v1.5"
+#
+EMBEDDINGS: 'sentence-transformers/all-MiniLM-L6-v2'
+CROSS_ENC: "snowflake/snowflake-arctic-embed-xs"
+# openai - gpt models as 'gpt-3.5-turbo', etc.
+# huggface - 'meta-llama/Llama-2-7b-chat-hf'
+#          - TinyLlama 'TinyLlama-1.1B-Chat-v1.0'
+#            "mistralai/Mixtral-8x7B-Instruct-v0.1"
+#            'HuggingFaceH4/zephyr-7b-beta'
+LLM_MODEL: 'gpt-3.5-turbo'
+# openai - openai as gpt models
+# 'opensource' - opensource as llama family of models loaded from huggingface
+LLM_TYPE: 'openai'
+PIPELINE_PATH: './_media/pipeline.png'
+# 'dense'-sentence transformers model
+# 'sparse'-bm25
+# 'hybrid'-both of dense and sparse
+# 'no_rag' - request to llm model w/o rag algo
+TYPE_RETRIEVAL: 'dense'
+REPORT_PATH: 'report/final.xlsx'
+# true - if we want to evaluate the RAG algorithm final result with llm model
+# false - if we do not want to evaluate the RAG algorithm final result
+# RAG_EVAL: true
+# gpt-4 preferably to use: accurate but expensive evaluation llm model
+EVAL_MODEL: 'gpt-3.5-turbo'
