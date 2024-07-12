@@ -32,5 +32,3 @@ def main():
 if __name__ == '__main__':
     main()
 "
-
-echo "Streamlit server started on port $PORT."

@@ -43,7 +43,7 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     package_data={
-     'rag_system': ['config.yml'],
+        'rag_system': ['config.yml'],
     },
     install_requires=list_reqs(),
     extras_require={},
