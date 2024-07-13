@@ -1,8 +1,6 @@
 """An entrypoint file streamlit gui of seven wonders app."""
-from typing import Tuple
-import os
 import streamlit as st
-print(os.getcwd())
+
 from rag_system.responds import get_respond_streamlit
 from rag_system.utils import create_gt_data
 from rag_system.utils import create_qui_question_data

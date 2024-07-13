@@ -1,6 +1,5 @@
 """Application file for fastapi endpoint for the rag algorithm."""
 import json
-from typing import Tuple, List
 
 import box
 from dotenv import load_dotenv, find_dotenv
@@ -21,7 +20,6 @@ with open('rag_system/config.yml', 'r', encoding='utf8') as ymlfile:
 app = FastAPI()
 # Configure templates
 templates = Jinja2Templates(directory="templates")
-
 
 
 @app.get("/")

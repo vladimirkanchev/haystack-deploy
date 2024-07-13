@@ -1,13 +1,10 @@
-import json
-
+"""Provide respond functions to fastapi and streamlit endpoints."""
 from typing import Tuple, List
-
-import box
-from dotenv import load_dotenv, find_dotenv
 
 from rag_system.eval_pipelines import evaluate_gt_pipeline
 from rag_system.inference import run_pipeline
 from rag_system.rag_pipelines import select_rag_pipeline
+
 
 def get_respond_fastapi(query: str) -> Tuple[str, List[str]]:
     """Run inference on the rag pipeline."""
@@ -15,6 +12,7 @@ def get_respond_fastapi(query: str) -> Tuple[str, List[str]]:
     rag_answer, retrieved_docs = run_pipeline(query, rag_pipeline)
 
     return rag_answer, retrieved_docs
+
 
 def get_respond_streamlit(query: str) -> Tuple[str, float]:
     """Run inference on the rag pipeline."""
