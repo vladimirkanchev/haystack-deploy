@@ -9,7 +9,6 @@ import box
 import yaml
 
 from rag_system.llm import setup_single_llm
-from rag_system.ingest import load_data_into_store
 
 from rag_system.embedders import setup_embedder
 from rag_system.wrapper_prompts import setup_prompt
@@ -39,14 +38,13 @@ def setup_no_rag_pipeline() -> Pipeline:
     return no_rag_pipeline
 
 
-def setup_rag_dense_pipeline() -> Pipeline:
+def setup_rag_dense_pipeline(data_store: InMemoryDocumentStore) -> Pipeline:
     """Build basic rag haystack pipeline."""
     prompt = setup_prompt()
-    doc_store = load_data_into_store()
 
     llm = setup_single_llm(cfg.LLM_MODEL)
     text_embedder = setup_embedder(cfg.EMBEDDINGS)
-    retriever = setup_single_retriever(doc_store)
+    retriever = setup_single_retriever(data_store)
 
     dense_pipeline = Pipeline()
     dense_pipeline.add_component("text_embedder", text_embedder)
@@ -69,12 +67,11 @@ def setup_rag_dense_pipeline() -> Pipeline:
     return dense_pipeline
 
 
-def setup_rag_sparse_pipeline() -> Pipeline:
+def setup_rag_sparse_pipeline(data_store: InMemoryDocumentStore) -> Pipeline:
     """Build basic rag haystack pipeline."""
     prompt = setup_prompt()
     llm = setup_single_llm(cfg.LLM_MODEL)
-    doc_store = InMemoryDocumentStore()
-    bm25_retriever = setup_single_retriever(doc_store)
+    bm25_retriever = setup_single_retriever(data_store)
 
     sparse_pipeline = Pipeline()
     sparse_pipeline.add_component("retriever", bm25_retriever)
@@ -93,13 +90,12 @@ def setup_rag_sparse_pipeline() -> Pipeline:
     return sparse_pipeline
 
 
-def setup_rag_hybrid_pipeline() -> Pipeline:
+def setup_rag_hybrid_pipeline(data_store: InMemoryDocumentStore) -> Pipeline:
     """Build basic rag haystack pipeline."""
-    doc_store = load_data_into_store()
     prompt = setup_prompt()
     llm = setup_single_llm(cfg.LLM_MODEL)
     text_embedder = setup_embedder(cfg.EMBEDDINGS)
-    embedding_retriever, bm25_retriever = setup_hyrbrid_retriever(doc_store)
+    embedding_retriever, bm25_retriever = setup_hyrbrid_retriever(data_store)
 
     document_joiner = DocumentJoiner()
     ranker = TransformersSimilarityRanker(model="BAAI/bge-reranker-base")
@@ -132,17 +128,14 @@ def setup_rag_hybrid_pipeline() -> Pipeline:
     return hybrid_pipeline
 
 
-def select_rag_pipeline() -> Pipeline:
-    """Select type of pipeline to load."""
+def select_rag_pipeline(data_store: InMemoryDocumentStore) -> Pipeline:
+    """Select type of haystack pipeline to load."""
     rag_pipeline = setup_no_rag_pipeline()
-    print(cfg.TYPE_RETRIEVAL)
     if cfg.TYPE_RETRIEVAL == 'dense':
-        rag_pipeline = setup_rag_dense_pipeline()
+        rag_pipeline = setup_rag_dense_pipeline(data_store)
     elif cfg.TYPE_RETRIEVAL == 'sparse':
-        rag_pipeline = setup_rag_sparse_pipeline()
+        rag_pipeline = setup_rag_sparse_pipeline(data_store)
     elif cfg.TYPE_RETRIEVAL == 'hybrid':
-        rag_pipeline = setup_rag_hybrid_pipeline()
-    elif cfg.TYPE_RETRIEVAL == 'no_rag':
-        rag_pipeline = setup_rag_hybrid_pipeline()
+        rag_pipeline = setup_rag_hybrid_pipeline(data_store)
 
     return rag_pipeline

@@ -79,7 +79,7 @@ def create_qui_question_data() -> Tuple:
     return tuple(create_question_data())
 
 
-def save_eval_data(rag_answers: List[str], retrieved_docs: List[List[str]]) \
+def save_eval_data(rag_answers: List[str], retrieved_docs: List[List[str]])\
         -> None:
     """Save evaluation data of the rag algo/given pipeline."""
     file_path = 'data/eval_data.pkl'

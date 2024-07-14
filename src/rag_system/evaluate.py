@@ -21,7 +21,10 @@ def evaluate_rag(query: List[str],
                  Dict[str, Dict[str, List[str] | List[List[str]]]]]:
     """Evaluate rag algorithm with ground truth data."""
     eval_pipeline = evaluate_gt_pipeline()
-
+    print(len(query))
+    print(len(rag_answers))
+    print(len(gt_answers))
+    print(len(retrieved_docs))
     results = eval_pipeline.run({
         "faithfulness": {"questions": query,
                          "contexts":
@@ -30,7 +33,6 @@ def evaluate_rag(query: List[str],
         # "sas_evaluator": {"predicted_answers": rag_answers,
         #                  "ground_truth_answers": gt_answers}
     })
-
     inputs = {
         "question": query,
         "contexts": retrieved_docs,

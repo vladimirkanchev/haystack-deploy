@@ -23,6 +23,7 @@ EXPOSE 8005
 
 WORKDIR /code/src
 
+ARG PYTHONPATH
 ENV PYTHONPATH="${PYTHONPATH}:/code/src"
 
 # Install the src package in editable mode

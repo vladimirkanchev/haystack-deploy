@@ -20,7 +20,6 @@ def run_pipeline(query: str, rag_pipeline: Pipeline) -> Pipeline:
              }
         )
     elif cfg.TYPE_RETRIEVAL == 'sparse':
-
         response_rag = rag_pipeline.run(
             {"retriever": {"query": query},
              "prompt_builder": {"question": query},
