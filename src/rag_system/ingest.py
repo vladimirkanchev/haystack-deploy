@@ -47,7 +47,7 @@ def extract_documents():
 
     device = ComponentDevice.from_str(device_str)
     # Determine the number of CPU cores and threads
-    num_cores = multiprocessing.cpu_count() - 4
+    num_cores = multiprocessing.cpu_count()
 
     # Use up to the number of cores, but not more than dataset size
     num_workers = min(num_cores, len(dataset))
