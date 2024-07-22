@@ -9,16 +9,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 import uvicorn
 
-from rag_system.ingest import load_data_into_store
 from rag_system.rag_pipelines import select_rag_pipeline
 from rag_system.responds import get_respond_fastapi
+from rag_system.ingest import load_data_into_store
 
 app = FastAPI(
     title="AI Q&A system for seven wonders using API",
     description='A simple demo',
     version='0.0.1'
 )
-data_store = load_data_into_store()
 origins = [
     "*"
 ]
@@ -35,8 +34,6 @@ load_dotenv(find_dotenv())
 
 
 app = FastAPI()
-data_store = load_data_into_store()
-rag_pipeline = select_rag_pipeline(data_store)
 # Configure templates
 templates = Jinja2Templates(directory="templates")
 
@@ -50,18 +47,25 @@ def index() -> Dict[str, str]:
 @app.post("/get_answer")
 async def answer(question: str = Form(...)) -> Dict[str, str | List[str]]:
     """Load output result of the inference of the rag algorithm."""
+    doc_store = load_data_into_store()
+    rag_pipeline = select_rag_pipeline(doc_store)
+    print(question)
     if not question:
         raise HTTPException(status_code=404)
-    curr_answer, relevant_documents = get_respond_fastapi(question, data_store)
+    curr_answer, relevant_documents = get_respond_fastapi(question,
+                                                          rag_pipeline)
+    k = len(relevant_documents)
 
     return {"answer": curr_answer,
-            "relevant_documents": relevant_documents
+            "relevant_documents": k
             }
 
 
 @app.post("/get_answer_gui")
 async def answer_gui(request: Request, question: str = Form(...)) -> Response:
     """Load output result of the inference of the rag algorithm."""
+    doc_store = load_data_into_store()
+    rag_pipeline = select_rag_pipeline(doc_store)
     if not question:
         raise HTTPException(status_code=404)
     curr_answer, relevant_documents = get_respond_fastapi(question,

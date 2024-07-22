@@ -4,20 +4,26 @@ from typing import Tuple
 import box
 from haystack.components.retrievers.in_memory import InMemoryBM25Retriever
 from haystack.components.retrievers.in_memory import InMemoryEmbeddingRetriever
+from milvus_haystack.milvus_embedding_retriever import MilvusEmbeddingRetriever
 import yaml
 
 with open('rag_system/config.yml', 'r', encoding='utf8') as ymlfile:
     cfg = box.Box(yaml.safe_load(ymlfile))
 
 
-def setup_single_retriever(doc_store: object) -> InMemoryBM25Retriever:
-    """Build embedding or sparse(bm25)-based retreiver."""
+def setup_single_retriever(doc_store: object)\
+      -> InMemoryBM25Retriever | MilvusEmbeddingRetriever |\
+          InMemoryEmbeddingRetriever:
+    """Build embedding or a single retreiver based on data."""
     retriever = None
-    if cfg.TYPE_RETRIEVAL == 'dense':
+    if cfg.TYPE_RETRIEVAL == 'dense' and cfg.TYPE_DOCSTORE == 'inmemory':
         retriever = InMemoryEmbeddingRetriever(document_store=doc_store)
-    elif cfg.TYPE_RETRIEVAL == 'sparse':
+    elif cfg.TYPE_RETRIEVAL == 'dense' and cfg.TYPE_DOCSTORE == 'milvus':
+        retriever = MilvusEmbeddingRetriever(document_store=doc_store)
+    elif cfg.TYPE_RETRIEVAL == 'sparse' and cfg.TYPE_DOCSTORE == 'inmemory':
         retriever = InMemoryBM25Retriever(document_store=doc_store)
-
+    elif  cfg.TYPE_RETRIEVAL == 'hybrid' and cfg.TYPE_DOCSTORE == 'inmemory':
+        retriever = MilvusEmbeddingRetriever(document_store=doc_store)
     return retriever
 
 

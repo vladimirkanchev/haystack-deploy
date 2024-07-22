@@ -1,23 +1,29 @@
 """An entrypoint file streamlit gui of seven wonders app."""
+import box
 import streamlit as st
+import yaml 
 
 from haystack import Pipeline
 
-from rag_system.ingest import load_data_into_store
 from rag_system.rag_pipelines import select_rag_pipeline
 from rag_system.responds import get_respond_streamlit
 from rag_system.utils import create_gt_data
 from rag_system.utils import create_qui_question_data
+from rag_system.ingest import load_data_into_store
 
 NUM_COLS = 2
 PARAMS = ["faithfulness: "]
 VALS_STR = ['val1', 'val2']
 
+with open('rag_system/config.yml', 'r', encoding='utf8') as ymlfile:
+    cfg = box.Box(yaml.safe_load(ymlfile))
+
 @st.cache_resource
 def initialize_document_store_pipeline():
     """Initialize the document store and pipeline."""
-    data_store = load_data_into_store()
-    rag_pipeline = select_rag_pipeline(data_store)
+    doc_store = load_data_into_store()
+    print(doc_store.count_documents())
+    rag_pipeline = select_rag_pipeline(doc_store)
     return rag_pipeline
 
 def initialize() -> None:

@@ -3,7 +3,7 @@ from typing import Optional
 
 import box
 from dotenv import load_dotenv, find_dotenv
-from haystack.components.generators import HuggingFaceTGIGenerator
+# from haystack.components.generators import HuggingFaceTGIGenerator
 from haystack.components.generators import OpenAIGenerator
 from haystack.utils import Secret
 import yaml
@@ -19,7 +19,7 @@ def setup_single_llm(model_name: str) -> Optional[object]:
     if cfg.LLM_TYPE == 'openai':
         return OpenAIGenerator(model=model_name)
     if cfg.LLM_TYPE == 'opensource':
-        return HuggingFaceTGIGenerator(
-            model=model_name,
-            token=Secret.from_env_var("HF_API_TOKEN"))
-    return None
+        # return HuggingFaceTGIGenerator(
+        #     model=model_name,
+        #     token=Secret.from_env_var("HF_API_TOKEN"))
+        return None

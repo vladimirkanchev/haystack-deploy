@@ -20,27 +20,27 @@ with open('rag_system/config.yml', 'r', encoding='utf8') as ymlfile:
 def main():
     """Apply test questions on Q&A system with ground truth evaluation."""
     query_list = create_question_data()
-    start = timeit.default_timer()
+   
     rag_answers, retrieved_docs_all, rag_questions = [], [], []
     gt_answers = create_gt_answer_data()
     data_store = load_data_into_store()
-    # curr_rag_pipeline = select_rag_pipeline(data_store)
-
+    
+    start = timeit.default_timer()
+    curr_rag_pipeline = select_rag_pipeline(data_store)
     for curr_query in query_list:
-        curr_rag_pipeline = select_rag_pipeline(data_store)
+        
         rag_answer, retrieved_docs = run_pipeline(curr_query,
                                                   curr_rag_pipeline)
         rag_questions.append(curr_query)
         rag_answers.append(rag_answer)
         retrieved_docs_all.append(retrieved_docs)
-
-    inputs, results = evaluate_rag(query_list, rag_answers,
-                                   gt_answers, retrieved_docs_all)
+    #inputs, results = evaluate_rag(query_list, rag_answers,
+    #                               gt_answers, retrieved_docs_all)
     end = timeit.default_timer()
-    # build_rag_eval_report(inputs, results)
+    #build_rag_eval_report(inputs, results)
     print('=' * 50)
     print(f"Time to retrieve answer: {end - start}")
-
+    print(rag_answers)
 
 if __name__ == "__main__":
     main()

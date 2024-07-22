@@ -25,6 +25,7 @@ def evaluate_rag(query: List[str],
     print(len(rag_answers))
     print(len(gt_answers))
     print(len(retrieved_docs))
+    print(len(retrieved_docs[0]))
     results = eval_pipeline.run({
         "faithfulness": {"questions": query,
                          "contexts":

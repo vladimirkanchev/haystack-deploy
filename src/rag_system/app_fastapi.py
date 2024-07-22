@@ -6,13 +6,12 @@ from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI, Request, Response, Form, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi.templating import Jinja2Templates
-
 import uvicorn
 import yaml
 
-from rag_system.ingest import load_data_into_store
 from rag_system.rag_pipelines import select_rag_pipeline
 from rag_system.responds import get_respond_fastapi
+from rag_system.ingest import load_data_into_store
 
 load_dotenv(find_dotenv())
 
@@ -21,8 +20,6 @@ with open('rag_system/config.yml', 'r', encoding='utf8') as ymlfile:
 
 
 app = FastAPI()
-data_store = load_data_into_store()
-rag_pipeline = select_rag_pipeline(data_store)
 # Configure templates
 templates = Jinja2Templates(directory="templates")
 
@@ -34,11 +31,15 @@ async def index(request: Request):
 
 
 @app.post("/get_answer")
-async def get_answer(request: Request, question: str = Form(...)):
+async def get_answer(request: Request, question: str = Form(str)):
     """Load output result of the inference of the rag algorithm."""
+    doc_store = load_data_into_store()
+  
+    rag_pipeline = select_rag_pipeline(doc_store)
     if not question:
         raise HTTPException(status_code=404)
-    answer, relevant_documents = get_respond_fastapi(question, data_store)
+    print(question)
+    answer, relevant_documents = get_respond_fastapi(question, rag_pipeline)
     response_data = jsonable_encoder(json.dumps(
         {"answer": answer,
          "relevant_documents": relevant_documents

@@ -1,10 +1,17 @@
 """Construct utility functions to generate useful data."""
+import box
 import pickle
 from typing import Dict, List, Tuple
+import yaml
 
 from haystack import Pipeline
+from haystack.document_stores.in_memory import InMemoryDocumentStore
+from milvus_haystack import MilvusDocumentStore
 
 
+with open('rag_system/config.yml', 'r', encoding='utf8') as ymlfile:
+    cfg = box.Box(yaml.safe_load(ymlfile))
+  
 def create_gt_answer_data() -> List[str]:
     """Create utility ground truth data - answers for questions."""
     all_gt_answers = [
@@ -112,3 +119,21 @@ def extract_retrieved_docs(response_rag: Pipeline) -> List[str]:
         retrieved_docs.append(docs.content)
 
     return retrieved_docs
+
+def load_doc_store():
+    """Select type of doc store and type of documents/embeddings."""    
+    if cfg.TYPE_DOCSTORE == 'inmemory':
+        doc_store = InMemoryDocumentStore()
+    elif cfg.TYPE_DOCSTORE == 'milvus' and cfg.TYPE_RETRIEVAL == 'dense':
+        doc_store = MilvusDocumentStore()
+            # sql_url="sqlite:///milvus_document_store.db",
+            # host="localhost",
+            #port="19530",
+            # index="haystack_index",
+            # embedding_dim=768,
+            # connection_args={"uri": "tcp://localhost:19530"},
+            # consistency_level="Strong")   
+    else:
+        doc_store = InMemoryDocumentStore()
+
+    return doc_store
