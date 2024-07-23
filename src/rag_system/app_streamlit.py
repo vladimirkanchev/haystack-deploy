@@ -1,7 +1,7 @@
 """An entrypoint file streamlit gui of seven wonders app."""
 import box
 import streamlit as st
-import yaml 
+import yaml
 
 from haystack import Pipeline
 
@@ -18,13 +18,15 @@ VALS_STR = ['val1', 'val2']
 with open('rag_system/config.yml', 'r', encoding='utf8') as ymlfile:
     cfg = box.Box(yaml.safe_load(ymlfile))
 
+
 @st.cache_resource
 def initialize_document_store_pipeline():
     """Initialize the document store and pipeline."""
     doc_store = load_data_into_store()
-    print(doc_store.count_documents())
+
     rag_pipeline = select_rag_pipeline(doc_store)
     return rag_pipeline
+
 
 def initialize() -> None:
     """Initialize streamlit guis areas."""
@@ -34,6 +36,7 @@ def initialize() -> None:
         st.session_state[VALS_STR[1]] = ""
     if 'parm_text' not in st.session_state:
         st.session_state.parm_text = ""
+
 
 @st.cache_data
 def get_question_data():

@@ -34,12 +34,13 @@ async def index(request: Request):
 async def get_answer(request: Request, question: str = Form(str)):
     """Load output result of the inference of the rag algorithm."""
     doc_store = load_data_into_store()
-  
+
     rag_pipeline = select_rag_pipeline(doc_store)
     if not question:
         raise HTTPException(status_code=404)
     print(question)
-    answer, relevant_documents = get_respond_fastapi(question, rag_pipeline)
+    answer, relevant_documents = get_respond_fastapi(str(question),
+                                                     rag_pipeline)
     response_data = jsonable_encoder(json.dumps(
         {"answer": answer,
          "relevant_documents": relevant_documents

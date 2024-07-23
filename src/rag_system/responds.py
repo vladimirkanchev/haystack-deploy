@@ -6,7 +6,6 @@ from rag_system.eval_pipelines import evaluate_gt_pipeline
 from rag_system.inference import run_pipeline
 
 
-
 def get_respond_fastapi(query: str,
                         rag_pipeline: Pipeline)\
         -> Tuple[str, List[str]]:

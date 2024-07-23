@@ -74,12 +74,11 @@ def write_documents(doc_store, final_docs, num_workers):
     # Write documents to the store in batches
     # batches = [final_docs[i:i + write_batch_size] for i
     #            in range(0, len(final_docs), write_batch_size)]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers)\
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) \
          as executor:
-           # for batch in batches:
+        # for batch in batches:
         executor.submit(write_batch, final_docs)
 
-    
     return doc_store
 
 
@@ -101,7 +100,6 @@ def convert_documents_into_embeddings():
                    for i in range(0, len(docs), batch_size)]
         docs_with_embeddings = [f.result() for f in
                                 concurrent.futures.as_completed(futures)]
-    
     final_docs = list(chain.from_iterable(docs_with_embeddings))
 
     return final_docs, device, num_workers
@@ -132,9 +130,9 @@ def load_embedded_data_into_inmemory_store() -> InMemoryDocumentStore:
 def load_embedded_data_into_milvus():
     """Load and embed documents into the milvus doc store/vector database."""
     milvus_doc_store = MilvusDocumentStore(
-            #sql_url="sqlite:///mydb.db", 
-            connection_args={"uri": "./milvus.db"},
-            drop_old=True,
+        # sql_url="sqlite:///mydb.db",
+        connection_args={"uri": "./milvus.db"},
+        drop_old=True,
     )
     final_docs, _, num_workers = convert_documents_into_embeddings()
 
