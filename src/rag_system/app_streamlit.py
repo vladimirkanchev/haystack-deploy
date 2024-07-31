@@ -23,9 +23,8 @@ with open('rag_system/config.yml', 'r', encoding='utf8') as ymlfile:
 def initialize_document_store_pipeline():
     """Initialize the document store and pipeline."""
     doc_store = load_data_into_store()
-
     rag_pipeline = select_rag_pipeline(doc_store)
-    return rag_pipeline
+    return rag_pipeline, doc_store
 
 
 def initialize() -> None:
@@ -46,7 +45,7 @@ def get_question_data():
     return question_gui_data, ground_truth_data
 
 
-def enter_wonder_question(rag_pipeline: Pipeline) -> None:
+def enter_wonder_question(rag_pipeline: Pipeline, doc_store) -> None:
     """Generate and evauate AI answer for a question."""
     st.title("AI App for the Seven Ancient Wonders:")
     question_gui_data, ground_truth_data = get_question_data()
@@ -77,13 +76,14 @@ def enter_wonder_question(rag_pipeline: Pipeline) -> None:
             st.session_state[VALS_STR[1]] = ground_truth_data[query]
             st.session_state.parm_text = f"{PARAMS[0]}: {param_value}"
             st.rerun()
-
-
+        elif st.button("Exit"):
+            del doc_store
+            return
+    
 def run() -> None:
     """Run streamlit gui application for ai rag answering."""
-    rag_pipeline = initialize_document_store_pipeline()
-    enter_wonder_question(rag_pipeline)
-
-
+    rag_pipeline, doc_store = initialize_document_store_pipeline()
+    enter_wonder_question(rag_pipeline, doc_store)
+    
 if __name__ == "__main__":
     run()

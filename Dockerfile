@@ -23,7 +23,7 @@ RUN pip install --no-cache-dir --upgrade -r /code/src/requirements.txt
 
 
 
-
+EXPOSE 8000
 EXPOSE 8004
 EXPOSE 8005
 EXPOSE 19530

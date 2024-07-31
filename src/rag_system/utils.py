@@ -128,7 +128,8 @@ def load_doc_store():
     if cfg.TYPE_DOCSTORE == 'inmemory':
         doc_store = InMemoryDocumentStore()
     elif cfg.TYPE_DOCSTORE == 'milvus' and cfg.TYPE_RETRIEVAL == 'dense':
-        doc_store = MilvusDocumentStore()
+        doc_store = MilvusDocumentStore(drop_old=True)
+        #    connection_args={"uri": cfg.DOCSTORE_PATH})
         # sql_url="sqlite:///milvus_document_store.db",
         # host="localhost",
         # port="19530",

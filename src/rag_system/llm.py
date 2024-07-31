@@ -18,9 +18,4 @@ def setup_single_llm(model_name: str) -> Optional[object] | None:
     """Build single llm (non-chat-TGI) model for RAG algorithm."""
     if cfg.LLM_TYPE == 'openai':
         return OpenAIGenerator(model=model_name)
-    if cfg.LLM_TYPE == 'opensource':
-        # return HuggingFaceTGIGenerator(
-        #     model=model_name,
-        #     token=Secret.from_env_var("HF_API_TOKEN"))
-        return None
     return None

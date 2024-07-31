@@ -129,11 +129,13 @@ def load_embedded_data_into_inmemory_store() -> InMemoryDocumentStore:
 
 def load_embedded_data_into_milvus():
     """Load and embed documents into the milvus doc store/vector database."""
+
     milvus_doc_store = MilvusDocumentStore(
         # sql_url="sqlite:///mydb.db",
-        connection_args={"uri": "./milvus.db"},
+        connection_args={"uri": cfg.DOCSTORE_PATH},
         drop_old=True,
     )
+    
     final_docs, _, num_workers = convert_documents_into_embeddings()
 
     milvus_doc_store = write_documents(milvus_doc_store,
