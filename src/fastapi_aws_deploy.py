@@ -105,7 +105,7 @@ async def get_answer(request: Request, question: str = Form(...)):
 def run():
     """Start a fastapi server."""
     uvicorn.run("fastapi_aws_deploy:app",
-                host="0.0.0.0",
+                host="127.0.0.1",
                 port=8006,
                 reload=True)
 
