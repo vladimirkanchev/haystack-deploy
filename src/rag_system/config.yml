@@ -5,7 +5,11 @@ DATA_SET: 'bilgeyucel/seven-wonders'
 # dense - 'sentence-transformers/all-MiniLM-L6-v2'
 # hybrid - "BAAI/bge-small-en-v1.5"
 #
-EMBEDDINGS: 'sentence-transformers/all-MiniLM-L6-v2'
+EMBD_SENT: 'sentence-transformers/all-MiniLM-L6-v2'
+EMBD_MILVUS: 'all-MiniLM-L6-v2'
+# 'SENT_EMB'
+# 'MILVUS_EMB'
+TYPE_EMB: 'SENT_EMB'
 CROSS_ENC: "snowflake/snowflake-arctic-embed-xs"
 # openai - gpt models as 'gpt-3.5-turbo', etc.
 # huggface - 'meta-llama/Llama-2-7b-chat-hf'

@@ -1,7 +1,7 @@
 """Contain functions to evaluate rag algorithm."""
 from typing import List, Dict, Tuple
 
-from haystack.evaluation.eval_run_result import EvaluationRunResult
+# from haystack.evaluation.eval_run_result import EvaluationRunResult
 
 import box
 import yaml
@@ -20,7 +20,7 @@ def evaluate_rag(query: List[str],
                  Dict[str, Dict[str, List[str] | List[List[str]]]]]:
     """Evaluate rag algorithm with ground truth data."""
     eval_pipeline = evaluate_gt_pipeline()
- 
+
     results = eval_pipeline.run({
         "faithfulness": {"questions": query,
                          "contexts":

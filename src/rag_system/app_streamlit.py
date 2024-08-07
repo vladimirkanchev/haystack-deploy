@@ -23,6 +23,7 @@ with open('rag_system/config.yml', 'r', encoding='utf8') as ymlfile:
 def initialize_document_store_pipeline():
     """Initialize the document store and pipeline."""
     doc_store = load_data_into_store()
+    print(doc_store.count_documents())
     rag_pipeline = select_rag_pipeline(doc_store)
     return rag_pipeline, doc_store
 
@@ -79,11 +80,13 @@ def enter_wonder_question(rag_pipeline: Pipeline, doc_store) -> None:
         elif st.button("Exit"):
             del doc_store
             return
-    
+
+
 def run() -> None:
     """Run streamlit gui application for ai rag answering."""
     rag_pipeline, doc_store = initialize_document_store_pipeline()
     enter_wonder_question(rag_pipeline, doc_store)
-    
+
+
 if __name__ == "__main__":
     run()

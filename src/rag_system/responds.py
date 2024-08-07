@@ -20,6 +20,7 @@ def get_respond_streamlit(query: str,
         -> Tuple[str, float]:
     """Run inference on the rag pipeline."""
     eval_pipeline = evaluate_gt_pipeline()
+
     rag_answer, retrieved_docs = run_pipeline(query, rag_pipeline)
     responds = eval_pipeline.run({
         "faithfulness": {"questions": [query],

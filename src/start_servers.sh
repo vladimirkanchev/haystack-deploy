@@ -1,23 +1,30 @@
 #!/bin/bash
 
+#!/bin/bash
+
 # Activate the virtual environment (if any)
-# source /path/to/your/venv/bin/activate
+# source .rag-deploy-env/bin/activate
 # /milvus-lite/milvus start &
 
-# # Wait for Milvus server to start
-# until nc -z -v -w30 localhost 19530
-# do
-#   echo "Waiting for Milvus server to start..."
-#   sleep 5
-# done
-# Run the data ingestion script
+# Function to handle cleanup on exit
+cleanup() {
+    echo "Cleaning up..."
+    kill $FASTAPI_PID 
+    #kill $STREAMLIT_PID
+}
 
+# Trap signals to ensure cleanup is called on script exit
+trap cleanup EXIT
 
-# Start the first server
-# /bin/bash /code/src/start_server_uvicorn.sh &
+echo "Starting FastAPI server..."
+uvicorn rag_system.app_fastapi:app --host 0.0.0.0 --port 8006 &
+FASTAPI_PID=$!
+echo "FastAPI server started with PID $FASTAPI_PID"
+wait $FASTAPI_PID
 
-# Start the second server
-/bin/bash /code/src/start_server_streamlit.sh &
-
-# Wait for both servers to exit
-wait
+# Start Streamlit App in the background
+# echo "Starting Streamlit app..."
+# streamlit run rag_system/app_streamlit.py --server.port 8007 &
+# STREAMLIT_PID=$!
+# echo "Streamlit app started with PID $STREAMLIT_PID"
+# wait $STREAMLIT_PID

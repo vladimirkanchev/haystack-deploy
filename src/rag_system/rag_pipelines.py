@@ -10,10 +10,11 @@ import yaml
 
 from rag_system.llm import setup_single_llm
 
-from rag_system.embedders import setup_embedder
+from rag_system.embedders import setup_text_embedder
 from rag_system.wrapper_prompts import setup_prompt
 from rag_system.retrievers import setup_single_retriever
 from rag_system.retrievers import setup_hyrbrid_retriever
+
 
 with open('rag_system/config.yml', 'r', encoding='utf8') as ymlfile:
     cfg = box.Box(yaml.safe_load(ymlfile))
@@ -43,7 +44,7 @@ def setup_rag_dense_pipeline(data_store: InMemoryDocumentStore) -> Pipeline:
     prompt = setup_prompt()
 
     llm = setup_single_llm(cfg.LLM_MODEL)
-    text_embedder = setup_embedder(cfg.EMBEDDINGS)
+    text_embedder = setup_text_embedder()
     retriever = setup_single_retriever(data_store)
 
     dense_pipeline = Pipeline()
@@ -94,7 +95,7 @@ def setup_rag_hybrid_pipeline(data_store: InMemoryDocumentStore) -> Pipeline:
     """Build basic rag haystack pipeline."""
     prompt = setup_prompt()
     llm = setup_single_llm(cfg.LLM_MODEL)
-    text_embedder = setup_embedder(cfg.EMBEDDINGS)
+    text_embedder = setup_text_embedder()
     embedding_retriever, bm25_retriever = setup_hyrbrid_retriever(data_store)
 
     document_joiner = DocumentJoiner()
